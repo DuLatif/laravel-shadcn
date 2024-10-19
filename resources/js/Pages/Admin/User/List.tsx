@@ -27,7 +27,14 @@ import {
     PaginationPrevious,
 } from "@/ui/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
-import { MoreHorizontal, ArrowUpDown, Search, UserPlus } from "lucide-react";
+import {
+    MoreHorizontal,
+    ArrowUpDown,
+    Search,
+    UserPlus,
+    Pencil,
+    Trash2,
+} from "lucide-react";
 import AdminLayout, { DashboardBreadcrumbs } from "@/Layouts/AdminLayout";
 import {
     Card,
@@ -45,8 +52,10 @@ import {
 } from "@/ui/select";
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -57,6 +66,17 @@ import { Label } from "@/ui/label";
 import InputError from "@/Components/InputError";
 import { useToast } from "@/hooks/use-toast";
 import PaginationSection from "@/sections/PaginationSection";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/ui/alert-dialog";
 
 const breadcrums: DashboardBreadcrumbs[] = [
     {
@@ -78,9 +98,14 @@ export default function UserList() {
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
 
-    const { data, post, setData, errors, processing } = useForm<
-        Partial<User> & { password_confirmation: string }
-    >({
+    const {
+        data,
+        post,
+        delete: destroy,
+        setData,
+        errors,
+        processing,
+    } = useForm<Partial<User> & { password_confirmation: string }>({
         name: "",
         email: "",
         password: "",
@@ -112,6 +137,17 @@ export default function UserList() {
             value.toString().toLowerCase().includes(searchTerm.toLowerCase())
         )
     );
+
+    const handleDelete = (id: number, user: string) => {
+        destroy(route("admin.users.destroy", id.toString()), {
+            onFinish: () => {
+                toast({
+                    title: `${user} deleted`,
+                    description: `${user} deleted successfully.`,
+                });
+            },
+        });
+    };
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -365,6 +401,68 @@ export default function UserList() {
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell>{user.role}</TableCell>
                                     <TableCell className="text-right">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            // onClick={() => {
+                                            //     setEditedId(category.id);
+                                            //     setData(
+                                            //         "editedName",
+                                            //         category.name
+                                            //     );
+                                            // }}
+                                        >
+                                            <Pencil className="h-4 w-4" />
+                                            <span className="sr-only">
+                                                Edit
+                                            </span>
+                                        </Button>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                    <span className="sr-only">
+                                                        Delete{" "}
+                                                    </span>
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>
+                                                        Hapus
+                                                        {user.name}
+                                                    </AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        Tindakan ini tidak dapat
+                                                        dibatalkan. Ini akan
+                                                        menghapus pengguna "
+                                                        {user.name} secara
+                                                        permanen dan
+                                                        menghapusnya dari server
+                                                        kami.
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>
+                                                        Batal
+                                                    </AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        onClick={() =>
+                                                            handleDelete(
+                                                                user.id,
+                                                                user.name
+                                                            )
+                                                        }
+                                                        className="dark:bg-red-700 dark:hover:bg-red-900  text-white"
+                                                    >
+                                                        Hapus
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <Button
@@ -396,9 +494,6 @@ export default function UserList() {
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem>
                                                     Edit user
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem>
-                                                    Delete user
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
