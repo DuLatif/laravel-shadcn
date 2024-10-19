@@ -1,26 +1,24 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import AdminLayout, { DashboardBreadcrumbs } from "@/Layouts/AdminLayout";
 
 export default function Dashboard() {
+    const breadcrums: DashboardBreadcrumbs[] = [
+        {
+            name: "Home",
+            target: "#",
+        },
+        {
+            name: "Dashboard",
+            target: "#",
+        },
+    ];
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Dashboard
-                </h2>
-            }
-        >
-            <Head title="Dashboard" />
-
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            You're logged in!
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </AuthenticatedLayout>
+        <AdminLayout title="Dashboard" breadcrumbs={breadcrums}>
+            <h1 className="text-2xl font-bold">
+                Welcome to the Admin Dashboard
+            </h1>
+            <p className="mt-4">
+                This is where you can add your main content for the admin panel.
+            </p>
+        </AdminLayout>
     );
 }

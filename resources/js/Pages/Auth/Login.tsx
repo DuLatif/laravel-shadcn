@@ -13,6 +13,7 @@ import {
 import { Input } from "@/ui/input";
 import { Label } from "@/ui/label";
 import Authentication from "@/Layouts/AuthenticationLayout";
+import InputError from "@/Components/InputError";
 
 export default function Login({
     status,
@@ -79,6 +80,10 @@ export default function Login({
                                 }
                                 required
                             />
+                            <InputError
+                                message={errors.email}
+                                className="mt-2"
+                            />
                         </div>
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">
@@ -99,6 +104,10 @@ export default function Login({
                                     setData("password", e.target.value)
                                 }
                                 required
+                            />
+                            <InputError
+                                message={errors.password}
+                                className="mt-2"
                             />
                         </div>
                     </CardContent>
