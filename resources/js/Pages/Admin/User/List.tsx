@@ -29,7 +29,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import { MoreHorizontal, ArrowUpDown, Search, UserPlus } from "lucide-react";
 import AdminLayout, { DashboardBreadcrumbs } from "@/Layouts/AdminLayout";
-import { Card, CardContent, CardFooter, CardHeader } from "@/ui/card";
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/ui/card";
 import {
     Select,
     SelectContent,
@@ -45,31 +51,12 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/ui/dialog";
-import { useForm } from "@inertiajs/react";
-import { TUser, User } from "@/types";
+import { useForm, usePage } from "@inertiajs/react";
+import { PageProps, PaginationResponse, TUser, User } from "@/types";
 import { Label } from "@/ui/label";
 import InputError from "@/Components/InputError";
 import { useToast } from "@/hooks/use-toast";
-
-// Sample user data
-const users = [
-    { id: 1, name: "Alice Johnson", email: "alice@example.com", role: "Admin" },
-    { id: 2, name: "Bob Smith", email: "bob@example.com", role: "User" },
-    {
-        id: 3,
-        name: "Charlie Brown",
-        email: "charlie@example.com",
-        role: "Editor",
-    },
-    { id: 4, name: "Diana Ross", email: "diana@example.com", role: "User" },
-    {
-        id: 5,
-        name: "Edward Norton",
-        email: "edward@example.com",
-        role: "Admin",
-    },
-    // Add more users as needed
-];
+import PaginationSection from "@/sections/PaginationSection";
 
 const breadcrums: DashboardBreadcrumbs[] = [
     {
@@ -82,6 +69,8 @@ const breadcrums: DashboardBreadcrumbs[] = [
     },
 ];
 export default function UserList() {
+    const { users } =
+        usePage<PageProps<{ users: PaginationResponse<User> }>>().props;
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
     const [searchTerm, setSearchTerm] = useState("");
@@ -107,7 +96,7 @@ export default function UserList() {
         }
     };
 
-    const sortedUsers = [...users].sort((a, b) => {
+    const sortedUsers = [...users.data].sort((a, b) => {
         if (!sortColumn) return 0;
         // @ts-ignore
         if (a[sortColumn] < b[sortColumn])
@@ -150,16 +139,17 @@ export default function UserList() {
         <AdminLayout title="Users" breadcrumbs={breadcrums}>
             <Card className="w-full">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
-                    <h2 className="text-xl font-bold tracking-tight">Users</h2>
+                    <CardTitle>Users</CardTitle>
+                    {/* <h2 className="text-xl font-bold tracking-tight">Users</h2> */}
                     <div className="flex items-center space-x-2">
                         <Input
                             placeholder="Search users..."
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            // onChange={(e) => setSearchTerm(e.target.value)}
                             className="max-w-sm"
                         />
-                        <Button>
-                            <Search className="mr-2 h-4 w-4" /> Search
+                        <Button variant={"secondary"}>
+                            <Search className="h-4 w-4" />
                         </Button>
                         <Dialog
                             open={isDialogOpen}
@@ -419,30 +409,16 @@ export default function UserList() {
                     </Table>
                 </CardContent>
                 <CardFooter>
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious href="#" />
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#">1</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#" isActive>
-                                    2
-                                </PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#">3</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationEllipsis />
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationNext href="#" />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
+                    <div className="flex justify-between w-full items-center">
+                        <div className="text-xs text-muted-foreground flex-1">
+                            Showing{" "}
+                            <strong>
+                                {users.from}-{users.to}
+                            </strong>{" "}
+                            of <strong>{users.total}</strong> users
+                        </div>
+                        <PaginationSection data={users} />
+                    </div>
                 </CardFooter>
             </Card>
         </AdminLayout>
