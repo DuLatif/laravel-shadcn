@@ -137,7 +137,7 @@ export default function UserList() {
 
     return (
         <AdminLayout title="Users" breadcrumbs={breadcrums}>
-            <Card className="w-full">
+            <Card className="w-full bg-white dark:bg-slate-900">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
                     <CardTitle>Users</CardTitle>
                     {/* <h2 className="text-xl font-bold tracking-tight">Users</h2> */}
