@@ -1,8 +1,11 @@
+export type TUser = "admin" | "user";
 export interface User {
     id: number;
     name: string;
     email: string;
     email_verified_at?: string;
+    role: TUser;
+    password: string;
 }
 
 export type PageProps<

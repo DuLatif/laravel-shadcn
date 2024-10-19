@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -27,4 +28,9 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::middleware('auth')->prefix('admin')->group(function () {});
+Route::middleware('auth')->prefix('admin')->group(function () {
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('admin.users');
+        Route::post('/', [UserController::class, 'store'])->name('admin.users.store');
+    });
+});

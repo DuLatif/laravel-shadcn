@@ -1,20 +1,19 @@
 "use client";
 
-import { PropsWithChildren, ReactNode, useState } from "react";
 import { Button } from "@/ui/button";
 import { ScrollArea } from "@/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/ui/sheet";
-import {
-    MenuIcon,
-    HomeIcon,
-    LayoutDashboardIcon,
-    UsersIcon,
-    SettingsIcon,
-    LogOutIcon,
-    ChevronRightIcon,
-    UserCircleIcon,
-} from "lucide-react";
 import { Head, Link } from "@inertiajs/react";
+import {
+    ChevronRightIcon,
+    LayoutDashboardIcon,
+    LogOutIcon,
+    MenuIcon,
+    SettingsIcon,
+    UserCircleIcon,
+    UsersIcon,
+} from "lucide-react";
+import { PropsWithChildren, useState } from "react";
 
 export interface DashboardBreadcrumbs {
     name: string;
@@ -71,7 +70,7 @@ export default function AdminLayout({
                         className={`flex items-center space-x-2 rounded-lg ${
                             isOpen ? "px-3 py-2" : "px-3 py-3"
                         } text-slate-600 hover:bg-slate-100 hover:text-slate-900`}
-                        href="#"
+                        href={route("admin.users")}
                     >
                         <UsersIcon className="h-5 w-5" />
                         {isOpen && <span>Users</span>}
