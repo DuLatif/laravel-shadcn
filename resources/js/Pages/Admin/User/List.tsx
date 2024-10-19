@@ -1,71 +1,8 @@
-import { FormEventHandler, useState } from "react";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/ui/table";
-import { Button } from "@/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/ui/dropdown-menu";
-import { Input } from "@/ui/input";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/ui/pagination";
-import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
-import {
-    MoreHorizontal,
-    ArrowUpDown,
-    Search,
-    UserPlus,
-    Pencil,
-    Trash2,
-} from "lucide-react";
-import AdminLayout, { DashboardBreadcrumbs } from "@/Layouts/AdminLayout";
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/ui/card";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/ui/select";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/ui/dialog";
-import { useForm, usePage } from "@inertiajs/react";
-import { PageProps, PaginationResponse, TUser, User } from "@/types";
-import { Label } from "@/ui/label";
 import InputError from "@/Components/InputError";
 import { useToast } from "@/hooks/use-toast";
+import AdminLayout, { DashboardBreadcrumbs } from "@/Layouts/AdminLayout";
 import PaginationSection from "@/sections/PaginationSection";
+import { PageProps, PaginationResponse, TUser, User } from "@/types";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -77,6 +14,43 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/ui/alert-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
+import { Button } from "@/ui/button";
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/ui/card";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/ui/dialog";
+import { Input } from "@/ui/input";
+import { Label } from "@/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/ui/select";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/ui/table";
+import { useForm, usePage } from "@inertiajs/react";
+import { ArrowUpDown, Pencil, Search, Trash2, UserPlus } from "lucide-react";
+import { FormEventHandler, useState } from "react";
 
 const breadcrums: DashboardBreadcrumbs[] = [
     {
@@ -432,8 +406,7 @@ export default function UserList() {
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
                                                     <AlertDialogTitle>
-                                                        Hapus
-                                                        {user.name}
+                                                        Hapus {user.name}
                                                     </AlertDialogTitle>
                                                     <AlertDialogDescription>
                                                         Tindakan ini tidak dapat
@@ -463,40 +436,6 @@ export default function UserList() {
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    className="h-8 w-8 p-0"
-                                                >
-                                                    <span className="sr-only">
-                                                        Open menu
-                                                    </span>
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuLabel>
-                                                    Actions
-                                                </DropdownMenuLabel>
-                                                <DropdownMenuItem
-                                                    onClick={() =>
-                                                        navigator.clipboard.writeText(
-                                                            user.email
-                                                        )
-                                                    }
-                                                >
-                                                    Copy email
-                                                </DropdownMenuItem>
-                                                <DropdownMenuSeparator />
-                                                <DropdownMenuItem>
-                                                    View details
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem>
-                                                    Edit user
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
                                     </TableCell>
                                 </TableRow>
                             ))}

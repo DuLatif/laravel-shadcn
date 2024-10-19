@@ -100,10 +100,13 @@ export default function AdminLayout({
                 <Link
                     href={route("logout")}
                     method="post"
-                    className="w-full"
+                    className="w-full "
                     as="button"
                 >
-                    <Button className="w-full" variant="outline">
+                    <Button
+                        className="w-full dark:text-red-200 dark:bg-red-900 hover:opacity-80 transition duration-150"
+                        variant="outline"
+                    >
                         <LogOutIcon className="mr-2 h-4 w-4" />
                         {isOpen && "Logout"}
                     </Button>
