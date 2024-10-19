@@ -23,9 +23,11 @@ export interface DashboardBreadcrumbs {
 export default function AdminLayout({
     breadcrumbs,
     children,
+    withoutTitlePage,
     title,
 }: PropsWithChildren<{
     title: string;
+    withoutTitlePage?: boolean;
     breadcrumbs?: DashboardBreadcrumbs[];
 }>) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -60,16 +62,7 @@ export default function AdminLayout({
                         className={`flex items-center space-x-2 rounded-lg ${
                             isOpen ? "px-3 py-2" : "px-3 py-3"
                         } text-slate-600 hover:bg-slate-100 hover:text-slate-900`}
-                        href="#"
-                    >
-                        <HomeIcon className="h-5 w-5" />
-                        {isOpen && <span>Home</span>}
-                    </Link>
-                    <Link
-                        className={`flex items-center space-x-2 rounded-lg ${
-                            isOpen ? "px-3 py-2" : "px-3 py-3"
-                        } text-slate-600 hover:bg-slate-100 hover:text-slate-900`}
-                        href="#"
+                        href={route("dashboard")}
                     >
                         <LayoutDashboardIcon className="h-5 w-5" />
                         {isOpen && <span>Dashboard</span>}
@@ -87,7 +80,7 @@ export default function AdminLayout({
                         className={`flex items-center space-x-2 rounded-lg ${
                             isOpen ? "px-3 py-2" : "px-3 py-3"
                         } text-slate-600 hover:bg-slate-100 hover:text-slate-900`}
-                        href="#"
+                        href={route("profile.edit")}
                     >
                         <SettingsIcon className="h-5 w-5" />
                         {isOpen && <span>Settings</span>}
@@ -151,28 +144,35 @@ export default function AdminLayout({
                             <MenuIcon className="h-6 w-6" />
                         </Button>
                         <nav className="flex" aria-label="Breadcrumb">
-                            <ol className="flex items-center space-x-2">
-                                {breadcrumbs?.map((item, index) => (
-                                    <li className="flex items-center">
-                                        <Link
-                                            className="text-slate-500 hover:text-slate-900"
-                                            href={item.target}
-                                        >
-                                            {item.name}
-                                        </Link>
-                                        {index < breadcrumbs.length - 1 && (
-                                            <ChevronRightIcon className="mx-2 h-4 w-4 text-slate-500" />
-                                        )}
-                                    </li>
-                                ))}
-                            </ol>
+                            <h3 className="text-lg font-medium text-slate-600">
+                                {title}
+                            </h3>
                         </nav>
                     </div>
                     <Button variant="ghost" size="icon">
                         <UserCircleIcon className="h-6 w-6" />
                     </Button>
                 </header>
-                <div className="p-6">{children}</div>
+                <div className="p-6">
+                    <div className="max-w-4xl space-y-6 ">
+                        <ol className="flex items-center space-x-2">
+                            {breadcrumbs?.map((item, index) => (
+                                <li className="flex items-center">
+                                    <Link
+                                        className="text-slate-500 hover:text-slate-900"
+                                        href={item.target}
+                                    >
+                                        {item.name}
+                                    </Link>
+                                    {index < breadcrumbs.length - 1 && (
+                                        <ChevronRightIcon className="mx-2 h-4 w-4 text-slate-500" />
+                                    )}
+                                </li>
+                            ))}
+                        </ol>
+                        {children}
+                    </div>
+                </div>
             </main>
         </div>
     );

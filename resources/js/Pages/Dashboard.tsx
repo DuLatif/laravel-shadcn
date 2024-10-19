@@ -12,7 +12,11 @@ export default function Dashboard() {
         },
     ];
     return (
-        <AdminLayout title="Dashboard" breadcrumbs={breadcrums}>
+        <AdminLayout
+            title="Dashboard"
+            breadcrumbs={breadcrums}
+            withoutTitlePage
+        >
             <h1 className="text-2xl font-bold">
                 Welcome to the Admin Dashboard
             </h1>
