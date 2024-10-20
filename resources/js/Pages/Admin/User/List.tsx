@@ -3,17 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import AdminLayout, { DashboardBreadcrumbs } from "@/Layouts/AdminLayout";
 import PaginationSection from "@/sections/PaginationSection";
 import { PageProps, PaginationResponse, TUser, User } from "@/types";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/ui/alert-dialog";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import { Button } from "@/ui/button";
 import {
@@ -51,6 +41,9 @@ import {
 import { useForm, usePage } from "@inertiajs/react";
 import { ArrowUpDown, Pencil, Search, Trash2, UserPlus } from "lucide-react";
 import { FormEventHandler, useState } from "react";
+import FormCreateUser from "./FormCreate";
+import DeleteUserDialog from "./DeleteUserDialog";
+import FormEditUser from "./FormEdit";
 
 const breadcrums: DashboardBreadcrumbs[] = [
     {
@@ -112,39 +105,6 @@ export default function UserList() {
         )
     );
 
-    const handleDelete = (id: number, user: string) => {
-        destroy(route("admin.users.destroy", id.toString()), {
-            onFinish: () => {
-                toast({
-                    title: `${user} deleted`,
-                    description: `${user} deleted successfully.`,
-                });
-            },
-        });
-    };
-
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-
-        setIsLoading(true);
-        post(route("admin.users.store"), {
-            onSuccess: () => {
-                setIsLoading(false);
-                setIsDialogOpen(false);
-                setData({
-                    name: "",
-                    email: "",
-                    password: "",
-                    password_confirmation: "",
-                });
-                toast({
-                    title: `${data.name} added`,
-                    description: `${data.name} created successfully`,
-                });
-            },
-        });
-    };
-
     return (
         <AdminLayout title="Users" breadcrumbs={breadcrums}>
             <Card className="w-full bg-white dark:bg-slate-900">
@@ -161,156 +121,7 @@ export default function UserList() {
                         <Button variant={"secondary"}>
                             <Search className="h-4 w-4" />
                         </Button>
-                        <Dialog
-                            open={isDialogOpen}
-                            onOpenChange={setIsDialogOpen}
-                        >
-                            <DialogTrigger asChild>
-                                <Button>
-                                    <UserPlus className="mr-2 h-4 w-4" /> Create
-                                    User
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent className="sm:max-w-[625px]">
-                                <DialogHeader>
-                                    <DialogTitle>Create New User</DialogTitle>
-                                    <DialogDescription>
-                                        Add a new user to your organization.
-                                        Click save when you're done.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <form onSubmit={submit} className="space-y-8">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="name">Name</Label>
-                                        <Input
-                                            id="name"
-                                            type="text"
-                                            name="name"
-                                            placeholder="John Doe"
-                                            value={data.name}
-                                            onChange={(e) =>
-                                                setData("name", e.target.value)
-                                            }
-                                            required
-                                        />
-                                        <InputError
-                                            message={errors.name}
-                                            className="mt-2"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="email">Email</Label>
-                                        <Input
-                                            id="email"
-                                            type="email"
-                                            name="email"
-                                            placeholder="user@example.com"
-                                            value={data.email}
-                                            onChange={(e) =>
-                                                setData("email", e.target.value)
-                                            }
-                                            required
-                                        />
-                                        <InputError
-                                            message={errors.email}
-                                            className="mt-2"
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="role">Role</Label>
-                                        <Select
-                                            value={data.role}
-                                            onValueChange={(e) =>
-                                                setData("role", e as TUser)
-                                            }
-                                            required
-                                        >
-                                            <SelectTrigger
-                                                className="col-span-3"
-                                                id="role"
-                                            >
-                                                <SelectValue placeholder="Select Role" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value={"admin"}>
-                                                    Admin
-                                                </SelectItem>
-                                                <SelectItem value={"user"}>
-                                                    User
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <InputError
-                                            message={errors.role}
-                                            className="mt-2"
-                                        />
-                                    </div>
-
-                                    <div className="flex space-x-4">
-                                        <div className="space-y-2 flex-1">
-                                            <Label htmlFor="password">
-                                                Password
-                                            </Label>
-                                            <Input
-                                                id="password"
-                                                type="password"
-                                                name="password"
-                                                placeholder="Enter a strong password"
-                                                value={data.password}
-                                                onChange={(e) =>
-                                                    setData(
-                                                        "password",
-                                                        e.target.value
-                                                    )
-                                                }
-                                                required
-                                            />
-                                            <InputError
-                                                message={errors.password}
-                                                className="mt-2"
-                                            />
-                                        </div>
-                                        <div className="space-y-2 flex-1">
-                                            <Label htmlFor="password">
-                                                Password Confirmation
-                                            </Label>
-                                            <Input
-                                                id="password"
-                                                type="password"
-                                                name="password_confirmation"
-                                                placeholder="Enter a strong password"
-                                                value={
-                                                    data.password_confirmation
-                                                }
-                                                onChange={(e) =>
-                                                    setData(
-                                                        "password_confirmation",
-                                                        e.target.value
-                                                    )
-                                                }
-                                                required
-                                            />
-                                            <InputError
-                                                message={
-                                                    errors.password_confirmation
-                                                }
-                                                className="mt-2"
-                                            />
-                                        </div>
-                                    </div>
-                                    <Button
-                                        type="submit"
-                                        className="w-full"
-                                        disabled={processing}
-                                    >
-                                        {processing
-                                            ? "Creating..."
-                                            : "Create User"}
-                                    </Button>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
+                        <FormCreateUser />
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -375,7 +186,7 @@ export default function UserList() {
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell>{user.role}</TableCell>
                                     <TableCell className="text-right">
-                                        <Button
+                                        {/* <Button
                                             variant="outline"
                                             size="sm"
                                             // onClick={() => {
@@ -390,52 +201,9 @@ export default function UserList() {
                                             <span className="sr-only">
                                                 Edit
                                             </span>
-                                        </Button>
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                    <span className="sr-only">
-                                                        Delete{" "}
-                                                    </span>
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>
-                                                        Hapus {user.name}
-                                                    </AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        Tindakan ini tidak dapat
-                                                        dibatalkan. Ini akan
-                                                        menghapus pengguna "
-                                                        {user.name} secara
-                                                        permanen dan
-                                                        menghapusnya dari server
-                                                        kami.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>
-                                                        Batal
-                                                    </AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                user.id,
-                                                                user.name
-                                                            )
-                                                        }
-                                                        className="dark:bg-red-700 dark:hover:bg-red-900  text-white"
-                                                    >
-                                                        Hapus
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
+                                        </Button> */}
+                                        <FormEditUser user={user} />
+                                        <DeleteUserDialog user={user} />
                                     </TableCell>
                                 </TableRow>
                             ))}
