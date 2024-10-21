@@ -44,4 +44,25 @@ class UserController extends Controller
         $user->delete();
         return redirect()->back()->with('status', 'User deleted successfully');
     }
+
+
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'sometimes|nullable|string|confirmed|min:6',
+            'role' => 'required|string|in:admin,user'
+        ]);
+
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->role = $request->role;
+        $user->save();
+
+        return redirect()->back()->with('status', 'User updated successfully');
+    }
 }

@@ -33,5 +33,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('admin.users');
         Route::post('/', [UserController::class, 'store'])->name('admin.users.store');
         Route::delete('/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+        Route::put('/{user}', [UserController::class, 'update'])->name('admin.users.update');
     });
 });
