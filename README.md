@@ -25,11 +25,11 @@ This starter kit provides a solid foundation for your next Laravel project, comb
 
 1.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/your-username/laravel-shadcn-starter.git your-project-name
+    git clone https://github.com/dulatif/laravel-shadcn-starter.git laravel-shadcn
     ```
 2.  **Install Dependencies:**
     ```bash
-    cd your-project-name
+    cd laravel-shadcn
     composer install
     npm install
     ```
